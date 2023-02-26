@@ -1,0 +1,4 @@
+- file: Dockerfile
+  image: vkumar2/docker-app
+- file: src/AppDockerfile
+  image: vkumar2/docker-app2

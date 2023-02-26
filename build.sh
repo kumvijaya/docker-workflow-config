@@ -2,6 +2,7 @@
 
 declare -A content
 
+# read
 while IFS="=" read -r key value; do content["$key"]=$value; done < <(
   yq '.street_address | to_entries | map([.key, .value] | join("=")) | .[]' personal_data.yaml
 )

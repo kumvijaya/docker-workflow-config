@@ -2,9 +2,10 @@
 
 declare -A content
 
+buildfile=$1
 # read
 while IFS="=" read -r key value; do content["$key"]=$value; done < <(
-  yq '.fileImageMap | to_entries | map([.key, .value] | join("=")) | .[]' docker-workflow-config/build.yaml
+  yq '.fileImageMap | to_entries | map([.key, .value] | join("=")) | .[]' $buildfile
 )
 
 for key in "${!content[@]}"; do 

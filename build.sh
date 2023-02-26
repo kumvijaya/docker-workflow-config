@@ -12,19 +12,20 @@ docker_registry=''
 if [ "$registry" != 'EMPTY' ]; then
     docker_registry=$registry
 fi
+
+set -x
 echo ${password} | docker login --username ${user} --password-stdin ${docker_registry}
-# read
+
 while IFS="=" read -r key value; do content["$key"]=$value; done < <(
   yq '.fileImageMap | to_entries | map([.key, .value] | join("=")) | .[]' $buildfile
 )
 
 for key in "${!content[@]}"; do 
-  printf "key %s, value %s\n" "$key" "${content[$key]}";
   file=$key
   image=${content[$key]}
-  IFS=', ' read -r -a array <<< "$tags"
+  IFS=', ' read -r -a tags_array <<< "$tags"
   docker_tags=''
-  for tag in "${array[@]}"
+  for tag in "${tags_array[@]}"
   do
       docker_tags="${docker_tags} -t $image:$tag"
   done

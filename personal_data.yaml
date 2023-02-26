@@ -1,6 +1,0 @@
-name: "My name"
-surname: "Foo"
-street_address:
-  city: "My city"
-  street: "My street"
-  number: 1

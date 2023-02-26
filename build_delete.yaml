@@ -1,3 +1,0 @@
-fileImageMap:
-  Dockerfile: vkumar2/docker-app
-  src/AppDockerfile: vkumar2/docker-app2

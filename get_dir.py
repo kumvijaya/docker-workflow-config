@@ -15,9 +15,9 @@ parser.add_argument(
 args = parser.parse_args()
 path = args.path
 
-name = os.path.dirname(path).strip()
-if name == "":
-    name = "."
+dir = os.path.dirname(path).strip()
+if dir == "":
+    dir = "."
     
-print(name)
+print(dir)
     

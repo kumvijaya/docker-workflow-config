@@ -22,8 +22,14 @@ for key in "${!content[@]}"; do
   printf "key %s, value %s\n" "$key" "${content[$key]}";
   file=$key
   image=${content[$key]}
+  IFS=', ' read -r -a array <<< "$tags"
+  docker_tags=''
+  for tag in "${array[@]}"
+  do
+      docker_tags="${docker_tags} -t $image:$tag"
+  done
   docker_dir=$(python docker-workflow-config/get_dir.py --path $file)
   docker_file=$(python docker-workflow-config/get_file.py --path $file)
-  printf "docker_dir %s, docker_file %s,  image %s\n" "${docker_dir}" "${docker_file}" "${image}";
-  (cd ${docker_dir} && docker build -f ${docker_file} ${tags} . && docker push ${image} --all-tags)
+  printf "docker_dir %s, docker_file %s,  image %s, docker_tags %s\n" "${docker_dir}" "${docker_file}" "${image}" "${docker_tags}";
+  (cd ${docker_dir} && docker build -f ${docker_file} ${docker_tags} . && docker push ${image} --all-tags)
 done

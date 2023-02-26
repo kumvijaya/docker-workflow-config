@@ -34,3 +34,4 @@ for key in "${!content[@]}"; do
   printf "docker_dir %s, docker_file %s,  image %s, docker_tags %s\n" "${docker_dir}" "${docker_file}" "${image}" "${docker_tags}";
   (cd ${docker_dir} && docker build -f ${docker_file} ${docker_tags} . && docker push ${image} --all-tags)
 done
+docker logout ${docker_registry}

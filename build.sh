@@ -17,11 +17,12 @@ if [ "$registry" != 'EMPTY' ]; then
     docker_registry=$registry
 fi
 
+echo ${password} | docker login --username ${user} --password-stdin ${docker_registry}
+
 for key in "${!content[@]}"; do 
   printf "key %s, value %s\n" "$key" "${content[$key]}";
   dockerfile=$key
-  image=${content[$key]}
-  echo ${password} | docker login --username ${user} --password-stdin ${docker_registry}
+  image=${content[$key]}  
   docker build -f ${dockerfile} ${tags} .
   docker push ${image} --all-tags 
 done

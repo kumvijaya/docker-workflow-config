@@ -21,10 +21,9 @@ while IFS="=" read -r key value; do content["$key"]=$value; done < <(
 for key in "${!content[@]}"; do 
   printf "key %s, value %s\n" "$key" "${content[$key]}";
   file=$key
+  image=${content[$key]}
   docker_dir=$(python docker-workflow-config/get_dir.py --path $file)
   docker_file=$(python docker-workflow-config/get_file.py --path $file)
-  image=${content[$key]}
   printf "docker_dir %s, docker_file %s,  image %s\n" "${docker_dir}" "${docker_file}" "${image}";
-  cd ${docker_dir}; docker build -f ${docker_file} ${tags} .
-  docker push ${image} --all-tags 
+  (cd ${docker_dir} && docker build -f ${docker_file} ${tags} . && docker push ${image} --all-tags)
 done

@@ -1,4 +1,3 @@
-- file: Dockerfile
-  image: vkumar2/docker-app
-- file: src/AppDockerfile
-  image: vkumar2/docker-app2
+fileImageMap:
+  Dockerfile: vkumar2/docker-app
+  src/AppDockerfile: vkumar2/docker-app2

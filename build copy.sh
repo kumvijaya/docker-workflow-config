@@ -2,7 +2,7 @@
 
 declare -A content
 
-build_images=$1
+buildfile=$1
 user=$2
 password=$3
 tags=$4
@@ -16,12 +16,13 @@ fi
 set -x
 echo ${password} | docker login --username ${user} --password-stdin ${docker_registry}
 
-IFS=', ' read -r -a build_image_array <<< "$build_images"
+while IFS="=" read -r key value; do content["$key"]=$value; done < <(
+  yq '.fileImageMap | to_entries | map([.key, .value] | join("=")) | .[]' $buildfile
+)
 
-for build_image in "${build_image_array[@]}"
-do
-  file=$(echo $build_image | cut -f1 -d=)
-  image=$(echo $build_image | cut -f2 -d=)
+for key in "${!content[@]}"; do 
+  file=$key
+  image=${content[$key]}
   IFS=', ' read -r -a tags_array <<< "$tags"
   docker_tags=''
   for tag in "${tags_array[@]}"
